@@ -86,8 +86,8 @@ void Simulation::store()
         file3 << t << " ";
     }
     cout << endl;
-    
-    
+
+
     file3 << endl;
     file3.close();
 }
@@ -102,21 +102,23 @@ void Simulation::setUpCACLayer(CACLayer &cacLayer)
     cac = &cacLayer;
 }
 
-void Simulation::run(double la_min, double la_max, double la_step, unsigned totalCalls)
+void Simulation::run(double la_min, double la_max, double la_step, unsigned totalCalls, unsigned count)
 {
     tCalls = totalCalls;
     cout << "Calls: " << tCalls << endl;
-//#	pragma omp parallel num_threads(4) 
-    for (double la = la_min ; la <= la_max ; la+= la_step)
-    {
-		reset();
-	    cL->reconfigureLoad(la);
-	    cout << (*cL) << endl;
-	    simulate(totalCalls);
-	    cac->clearMatrixAllocation();//limpa alocações
-	    cac->clearListOfConnections();//limpa lista de conexoes
-	    store();
-    }
+//#	pragma omp parallel num_threads(4)
+	for (int i = 0; i < count; i++) {
+	    for (double la = la_min ; la <= la_max ; la+= la_step)
+	    {
+			reset();
+		    cL->reconfigureLoad(la);
+		    cout << (*cL) << endl;
+		    simulate(totalCalls);
+		    cac->clearMatrixAllocation();//limpa alocações
+		    cac->clearListOfConnections();//limpa lista de conexoes
+		    store();
+	    }
+	}
 }
 
 void Simulation::simulate(unsigned totalCalls)
@@ -125,7 +127,7 @@ void Simulation::simulate(unsigned totalCalls)
     unsigned s,t;
 
     unsigned slotsSolicitados = 0;
-    
+
     for (unsigned i = 0 ; i < totalCalls ; i++)
     {
         cL->getConnection(s,t); //pega as conexões da camada cliente (ClientLayer)
@@ -135,7 +137,7 @@ void Simulation::simulate(unsigned totalCalls)
         tSlotsSocilitados += slotsSolicitados;
 
         tPerSlotsSocilitados[slotsSolicitados]++;
-		
+
 		int aux;
         if (aux=cac->tryRequest(s,t,slotsSolicitados ,cL->requestQoS(),cL->requestQoSThereshold())) //tenta estabelecer a conexão
         {
@@ -155,7 +157,7 @@ void Simulation::simulate(unsigned totalCalls)
         actualTime += cL->nextConnectionInterval();
 
         cac->updateConnectionsByTime(actualTime);
-		
+
 //		std::cout << cL->nextConnectionInterval() << std::endl;
     }
 }

@@ -29,7 +29,7 @@ using namespace std;
 //            0, 0, 0, 0, 0, 0, 1, 0, 1,
 //            1, 0, 0, 0, 0, 0, 0, 1, 0
 //        };
-        
+
         {
             //A  B  C  D  E
               0, 1, 0, 0, 1,
@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
     unsigned slots = atoi(argv[2]);
     double la_min = atoi(argv[3]), la_max = atoi(argv[4]), la_step = atoi(argv[5]);
     unsigned totalConnections = atoi(argv[6]);
+    unsigned count = atoi(argv[7]);
 
     double gama = 7.0, gamaTol = 4.0, mii = 1.0;
 
@@ -62,7 +63,7 @@ int main(int argc, char *argv[])
     sim.setUpCACLayer(cac);
 
     printf("Trafego: %g %g %g\n",la_min,la_max,la_step);
-    sim.run(la_min,la_max,la_step,totalConnections);
-    
+    sim.run(la_min,la_max,la_step,totalConnections,count);
+
 	return 0;
 }

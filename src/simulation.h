@@ -28,8 +28,8 @@ public:
     void simulate(unsigned totalCalls);
     void store();
     void storeXML(Connection con, unsigned i, unsigned s, unsigned t);
-    
-    void run(double la_min, double la_max, double la_step, unsigned totalCalls);
+
+    void run(double la_min, double la_max, double la_step, unsigned totalCalls, unsigned count=1);
 
 private:
 
@@ -50,6 +50,8 @@ private:
     unsigned lambda;
     unsigned slots;
     unsigned tNos;
+
+	unsigned count;
 
 	void WriteLog(int req, int from, int to, int bloq);
 };
