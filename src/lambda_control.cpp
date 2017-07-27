@@ -2,7 +2,7 @@
 
 #include <unistd.h>
 
-LambdaControl::LambdaControl(unsigned tNos, unsigned lambda, unsigned slots):matrixAllocation(tNos*tNos*lambda*slots,0),lambdaUsed(tNos*tNos,0),nextStateNetwork(tNos*tNos*lambda*slots,false)
+LambdaControl::LambdaControl(unsigned tNos, unsigned lambda, unsigned slots):matrixAllocation(tNos*tNos*lambda*slots,0),nextStateNetwork(tNos*tNos*lambda*slots,false)//,lambdaUsed(tNos*tNos,0)
 {
 	//matrixAllocation.reserve(tNos*tNos*lambda, NULL);
 	this->tNos = tNos;
@@ -64,12 +64,12 @@ void LambdaControl::allocConnection(Connection &connection, unsigned lambda, uns
 	while ( !path.isEndPath())
 	{
 		matrixAllocation[getMap(path.getActualStep(),path.getNextStep(),lambda,slot)] = &connection;
-		lambdaUsed[path.getActualStep()*tNos + path.getNextStep()]++;
+		//lambdaUsed[path.getActualStep()*tNos + path.getNextStep()]++;
 
 		if (tT == Connection::BIDIRECTIONAL)
 		{
             matrixAllocation[getMap(path.getNextStep(),path.getActualStep(),lambda,slot)] = &connection;
-		    lambdaUsed[path.getNextStep()*tNos + path.getActualStep()]++;
+		    //lambdaUsed[path.getNextStep()*tNos + path.getActualStep()]++;
 		}
 		path.goAhead();
 	}
@@ -82,12 +82,12 @@ void LambdaControl::disallocConnection(Connection &connection, unsigned slot)
 	while ( !path.isEndPath())
 	{
 		matrixAllocation[getMap(path.getActualStep(),path.getNextStep(),connection.getLambda(),slot)] = NULL;
-		lambdaUsed[path.getActualStep()*tNos + path.getNextStep()]--;
+		//lambdaUsed[path.getActualStep()*tNos + path.getNextStep()]--;
 
 		if (connection.getTransmissionType() == Connection::BIDIRECTIONAL)
 		{
             matrixAllocation[getMap(path.getNextStep(),path.getActualStep(),connection.getLambda(),slot)] = NULL;
-		    lambdaUsed[path.getNextStep()*tNos + path.getActualStep()]--;
+		    //lambdaUsed[path.getNextStep()*tNos + path.getActualStep()]--;
 		}
 		path.goAhead();
 	}
@@ -124,10 +124,10 @@ void LambdaControl::clear()
     {
         matrixAllocation[i] = 0;
     }
-    for (int i = 0 ; i < lambdaUsed.size() ; i++)
-    {
-        lambdaUsed[i] = 0;
-    }
+    // for (int i = 0 ; i < lambdaUsed.size() ; i++)
+    // {
+    //     lambdaUsed[i] = 0;
+    // }
 }
 
 unsigned LambdaControl::getTotalLambdasAllocatedIn(unsigned from, unsigned to)//alterar depois
@@ -188,7 +188,7 @@ double LambdaControl::calcRelativesPossibilities(Path &path, unsigned lambda)
 
 	double r_score[] = {0,0,0};
 
-	for (unsigned lmb = 0; lmb < tLambdas; lmb += 1){
+	for(unsigned lmb = 0; lmb < tLambdas; lmb += 1){
 		for(unsigned slot = 0 ; slot < tSlots; slot++){
 			if(canAlloc(path, lmb, slot)){
 				a_scr++;
@@ -207,8 +207,7 @@ double LambdaControl::calcRelativesPossibilities(Path &path, unsigned lambda)
 		a_scr = 0;
 	}
 
-	for(unsigned slot = 0 ; slot < tSlots; slot++)
-	{
+	for(unsigned slot = 0 ; slot < tSlots; slot++){
 		if(canAlloc(path, lambda, slot)){
 			a_scr++;
 	    }else{
@@ -276,11 +275,7 @@ unsigned LambdaControl::calcPossibilities(Path &path, unsigned lambda)
 		    	n_scr = 0;
 		   	}
 		}
-		// if((aux1 != aux2) && (lmbd != lambda)){
-		// 	std::cout << "(aux1,aux2)=(" << aux1 << "," << aux2 << ");;(lmbd,lambda)=(" << lmbd << "," << lambda << ")" << std::endl;
-		// 	std::cout << path << std::endl;
-		// }
-
+		
 		a_score[0] += a_scr;
 		a_score[1] += (a_scr - 1 > 0) ? a_scr - 1 : 0;
 		a_score[2] += (a_scr - 2 > 0) ? a_scr - 2 : 0;
