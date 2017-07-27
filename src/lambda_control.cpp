@@ -130,15 +130,15 @@ void LambdaControl::clear()
     // }
 }
 
-unsigned LambdaControl::getTotalLambdasAllocatedIn(unsigned from, unsigned to)//alterar depois
-{
-    return lambdaUsed[from*tNos + to];
-}
-
-unsigned LambdaControl::getTotalLambdasFreeIn(unsigned from, unsigned to)//alterar depois
-{
-    return tLambdas - lambdaUsed[from*tNos + to];
-}
+// unsigned LambdaControl::getTotalLambdasAllocatedIn(unsigned from, unsigned to)//alterar depois
+// {
+//     return lambdaUsed[from*tNos + to];
+// }
+//
+// unsigned LambdaControl::getTotalLambdasFreeIn(unsigned from, unsigned to)//alterar depois
+// {
+//     return tLambdas - lambdaUsed[from*tNos + to];
+// }
 
 void LambdaControl::initNextStateNetwork()
 {
@@ -275,7 +275,7 @@ unsigned LambdaControl::calcPossibilities(Path &path, unsigned lambda)
 		    	n_scr = 0;
 		   	}
 		}
-		
+
 		a_score[0] += a_scr;
 		a_score[1] += (a_scr - 1 > 0) ? a_scr - 1 : 0;
 		a_score[2] += (a_scr - 2 > 0) ? a_scr - 2 : 0;
@@ -290,72 +290,4 @@ unsigned LambdaControl::calcPossibilities(Path &path, unsigned lambda)
 	}
 
 	return (a_score[0] + a_score[1] + a_score[2]) - (n_score[0] + n_score[1] + n_score[2]);
-}
-
-unsigned LambdaControl::calcPossibilities(Path &path, unsigned lambda, unsigned nSlots)
-{
-	int a_score=0;
-	int a_scr=0;
-
-	int n_score=0;
-	int n_scr=0;
-
-	for(int slot = 0 ; slot < tSlots; slot++)
-	{
-		if(canAlloc(path, lambda, slot))
-        {
-			a_scr++;
-        }
-        else
-        {
-			a_score += (a_scr - (nSlots - 1) > 0) ? a_scr - (nSlots - 1) : 0;
-        	a_scr = 0;
-       	}
-
-        if(canAllocNextState(path, lambda, slot))
-        {
-			n_scr++;
-        }
-        else
-        {
-			n_score += (n_scr - (nSlots - 1) > 0) ? n_scr - (nSlots - 1) : 0;
-        	n_scr = 0;
-       	}
-    }
-
-	a_score += (a_scr - (nSlots - 1) > 0) ? a_scr - (nSlots - 1) : 0;
-	n_score += (n_scr - (nSlots - 1) > 0) ? n_scr - (nSlots - 1) : 0;
-
-	return (a_score) - (n_score);
-}
-
-vector<Hole> LambdaControl::Possibilities(Path &path, unsigned nSlots)
-{
-	vector<Hole> possibilities;
-
-	bool findedSlots;
-	for(int lambda = 0 ; lambda < getTotalLambdas() ; lambda++)
-	{
-		for(int slot = 0 ; slot <= getTotalSlots() - nSlots ; slot++)
-		{
-			findedSlots = true;
-			for(int slot_i = slot ; slot_i < slot + nSlots ; slot_i++ )
-			{
-				if(!canAlloc(path,lambda,slot_i))
-				{
-					findedSlots = false;
-					slot = slot_i;
-					break;
-				}
-			}
-
-			if (findedSlots == true)
-			{
-				Hole hole(lambda, slot);
-				possibilities.push_back(hole);
-			}
-	    }
-	}
-
-	return possibilities;
 }

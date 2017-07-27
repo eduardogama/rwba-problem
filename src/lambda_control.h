@@ -23,30 +23,23 @@ public:
 
 	vector<Connection*> *getMatrixAllocation();
 
-	unsigned getTotalLambdasAllocatedIn(unsigned from, unsigned to);
-	unsigned getTotalLambdasFreeIn(unsigned from, unsigned to);
+	// unsigned getTotalLambdasAllocatedIn(unsigned from, unsigned to);
+	// unsigned getTotalLambdasFreeIn(unsigned from, unsigned to);
 
 	void clear();
 	unsigned getMap(unsigned from, unsigned to, unsigned lambda, unsigned slots);
 
-
-	void getActualSateNetwork();
-	vector<Hole> Possibilities(Path &path, unsigned nSlots);
 	bool canAllocNextState(const Path &path, unsigned lambda, unsigned slot);
 
 	double calcRelativesPossibilities(Path &path, unsigned lambda);
 	unsigned calcPossibilities(Path &path, unsigned lambda);
-	unsigned calcPossibilities(Path &path, unsigned lambda, unsigned nSlots);
 
 	void initNextStateNetwork();
 	void allocNextStateNetwork(const Path &path, unsigned lambda, unsigned slot, unsigned nSlots);
 	void disallocNextStateNetwork(const Path &path, unsigned lambda, unsigned slot, unsigned nSlots);
 
-	double getAvailability();
-
 private:
-	vector<Connection*> matrixAllocation;
-	vector<unsigned> lambdaUsed;
+	vector<Connection *> matrixAllocation;
 	unsigned tNos;
 	unsigned tLambdas;
 	unsigned tSlots;

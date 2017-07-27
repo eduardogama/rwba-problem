@@ -130,10 +130,9 @@ bool WavelengthAssignmentSubProblem::randomHeuristic(Path &path, unsigned nSlots
 {
 	vector<unsigned> lambdaList;        //Aloca os lambdas livres
 	unsigned slotList[lambdaControl->getTotalLambdas()];  //Aloca os slots livres
-	bool findedSlots;
 	for ( int lambda = 0 ; lambda < lambdaControl->getTotalLambdas() ; lambda++){
 		for ( int slot = 0 ; slot <= lambdaControl->getTotalSlots() - nSlots ; slot++){
-			findedSlots = true;
+			bool findedSlots = true;
 			for ( int slot_i = slot ; slot_i < slot + nSlots ; slot_i++ ) {
 				if(!lambdaControl->canAlloc(path,lambda,slot_i)){
 					findedSlots = false;
@@ -167,13 +166,13 @@ bool WavelengthAssignmentSubProblem::lossOfCapacityHeuristc(Path &path, vector<P
 {
 	vector<Hole> possibilities;
 
-	bool findedSlots;
+
 
 	for(int lambda = 0; lambda < lambdaControl->getTotalLambdas(); lambda++)
 	{
 		for(int slot = 0; slot <= lambdaControl->getTotalSlots() - nSlots; slot++)
 		{
-			findedSlots = true;
+			bool findedSlots = true;
 			for(int slot_i = slot; slot_i < slot + nSlots; slot_i++ )
 			{
 				if(!lambdaControl->canAlloc(path,lambda,slot_i))
@@ -221,44 +220,4 @@ bool WavelengthAssignmentSubProblem::lossOfCapacityHeuristc(Path &path, vector<P
 	}
 
 	return true;
-}
-
-double WavelengthAssignmentSubProblem::calcPossibilitiesLambdas(Path &path)
-{
-	int a_score[] = {0,0,0};
-	int a_scr=0;
-
-	for(int lambda = 0 ; lambda < lambdaControl->getTotalLambdas() ; lambda++)
-	{
-		for(int slot = 0 ; slot < lambdaControl->getTotalSlots(); slot++)
-		{
-			if(lambdaControl->canAlloc(path, lambda, slot))
-			{
-				a_scr++;
-			}
-			else
-			{
-				//		    	a_score[0] += a_scr;
-				//				a_score[1] += a_scr/2;
-				//				a_score[2] += a_scr/3;
-
-				a_score[0] += a_scr;
-				a_score[1] += (a_scr - 1 > 0) ? a_scr - 1 : 0;
-				a_score[2] += (a_scr - 2 > 0) ? a_scr - 2 : 0;
-
-				a_scr = 0;
-			}
-		}
-		//		a_score[0] += a_scr;
-		//		a_score[1] += a_scr/2;
-		//		a_score[2] += a_scr/3;
-
-		a_score[0] += a_scr;
-		a_score[1] += (a_scr - 1 > 0) ? a_scr - 1 : 0;
-		a_score[2] += (a_scr - 2 > 0) ? a_scr - 2 : 0;
-
-		a_scr=0;
-	}
-
-	return (a_score[0] + a_score[1] + a_score[2]);
 }
