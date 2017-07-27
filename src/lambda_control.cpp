@@ -2,7 +2,7 @@
 
 #include <unistd.h>
 
-LambdaControl::LambdaControl(unsigned tNos, unsigned lambda, unsigned slots):matrixAllocation(tNos*tNos*lambda*slots,0),lambdaUsed(tNos*tNos,0),nextStateNetwork(tNos*tNos*lambda*slots,false), actualStateNetwork(tNos*tNos*lambda*slots,false)
+LambdaControl::LambdaControl(unsigned tNos, unsigned lambda, unsigned slots):matrixAllocation(tNos*tNos*lambda*slots,0),lambdaUsed(tNos*tNos,0),nextStateNetwork(tNos*tNos*lambda*slots,false)
 {
 	//matrixAllocation.reserve(tNos*tNos*lambda, NULL);
 	this->tNos = tNos;
@@ -140,14 +140,6 @@ unsigned LambdaControl::getTotalLambdasFreeIn(unsigned from, unsigned to)//alter
     return tLambdas - lambdaUsed[from*tNos + to];
 }
 
-void LambdaControl::getActualSateNetwork()
-{
-	for(unsigned i=0; i < matrixAllocation.size(); i++)
-	{
-		actualStateNetwork[i] = (matrixAllocation[i] != NULL);
-	}
-}
-
 void LambdaControl::initNextStateNetwork()
 {
 	for(unsigned i=0; i < matrixAllocation.size(); i++)
@@ -156,7 +148,7 @@ void LambdaControl::initNextStateNetwork()
 	}
 }
 
-void LambdaControl::allocNextStateNetwork(Path &path, unsigned lambda, unsigned slot, unsigned nSlots)
+void LambdaControl::allocNextStateNetwork(const Path &path, unsigned lambda, unsigned slot, unsigned nSlots)
 {
 	Path path_ = path;
 
@@ -171,7 +163,7 @@ void LambdaControl::allocNextStateNetwork(Path &path, unsigned lambda, unsigned 
 	}
 }
 
-void LambdaControl::disallocNextStateNetwork(Path &path, unsigned lambda, unsigned slot, unsigned nSlots)
+void LambdaControl::disallocNextStateNetwork(const Path &path, unsigned lambda, unsigned slot, unsigned nSlots)
 {
 	Path path_ = path;
 
@@ -184,64 +176,6 @@ void LambdaControl::disallocNextStateNetwork(Path &path, unsigned lambda, unsign
 		}
 		path_.goAhead();
 	}
-}
-
-unsigned LambdaControl::actualPossibilities(Path &path, unsigned lambda, unsigned nSlots)
-{
-	unsigned score[] = {0,0,0};
-	unsigned scr;
-
-	for(unsigned slot = 0 ; slot < tSlots; slot++)
-	{
-        scr=0;
-        for(unsigned slot_i = slot ; slot_i < tSlots; slot_i++)
-        {
-        	if(!canAlloc(path, lambda, slot_i))
-            {
-                slot = slot_i; //otimização
-                break;
-            }
-            else
-            {
-				scr++;
-            }
-        }
-
-    	score[0] += scr;
-		score[1] += scr/2;
-		score[2] += scr/3;
-    }
-
-	return score[0] + score[1] + score[2];
-}
-
-unsigned LambdaControl::nextPossibilities(Path &path, unsigned lambda, unsigned nSlots)
-{
-	unsigned score[] = {0,0,0};
-	unsigned scr;
-
-	for(unsigned slot = 0 ; slot < tSlots; slot++)
-	{
-        scr = 0;
-        for(unsigned slot_i = slot ; slot_i < tSlots; slot_i++ )
-        {
-            if(!canAllocNextState(path, lambda, slot_i))
-            {
-                slot = slot_i;
-                break;
-            }
-            else
-            {
-            	scr++;
-           	}
-        }
-
-		score[0] += scr;
-		score[1] += scr/2;
-		score[2] += scr/3;
-    }
-
-	return score[0] + score[1] + score[2];
 }
 
 double LambdaControl::calcRelativesPossibilities(Path &path, unsigned lambda)
@@ -266,13 +200,12 @@ double LambdaControl::calcRelativesPossibilities(Path &path, unsigned lambda)
 		    	a_scr = 0;
 		   	}
 		}
+		r_score[0] += a_scr;
+		r_score[1] += (a_scr - 1 > 0) ? a_scr - 1 : 0;
+		r_score[2] += (a_scr - 2 > 0) ? a_scr - 2 : 0;
+
+		a_scr = 0;
 	}
-
-	r_score[0] += a_scr;
-	r_score[1] += (a_scr - 1 > 0) ? a_scr - 1 : 0;
-	r_score[2] += (a_scr - 2 > 0) ? a_scr - 2 : 0;
-
-	a_scr = 0;
 
 	for(unsigned slot = 0 ; slot < tSlots; slot++)
 	{
@@ -316,7 +249,10 @@ unsigned LambdaControl::calcPossibilities(Path &path, unsigned lambda)
 
 	int n_score[] = {0,0,0};
 	int n_scr=0;
+
+	int aux1, aux2;
 	for (unsigned lmbd = 0; lmbd < tLambdas; lmbd++) {
+		aux1 = 0; aux2 = 0;
 		for(unsigned slot = 0 ; slot < tSlots; slot++) {
 			if(canAlloc(path, lmbd, slot)) {
 				a_scr++;
@@ -325,6 +261,7 @@ unsigned LambdaControl::calcPossibilities(Path &path, unsigned lambda)
 				a_score[1] += (a_scr - 1 > 0) ? a_scr - 1 : 0;
 				a_score[2] += (a_scr - 2 > 0) ? a_scr - 2 : 0;
 
+				aux1 += a_scr;
 		    	a_scr = 0;
 		   	}
 
@@ -335,18 +272,27 @@ unsigned LambdaControl::calcPossibilities(Path &path, unsigned lambda)
 				n_score[1] += (n_scr - 1 > 0) ? n_scr - 1 : 0;
 				n_score[2] += (n_scr - 2 > 0) ? n_scr - 2 : 0;
 
+				aux2 += n_scr;
 		    	n_scr = 0;
 		   	}
 		}
-	}
-	
-	a_score[0] += a_scr;
-	a_score[1] += (a_scr - 1 > 0) ? a_scr - 1 : 0;
-	a_score[2] += (a_scr - 2 > 0) ? a_scr - 2 : 0;
+		// if((aux1 != aux2) && (lmbd != lambda)){
+		// 	std::cout << "(aux1,aux2)=(" << aux1 << "," << aux2 << ");;(lmbd,lambda)=(" << lmbd << "," << lambda << ")" << std::endl;
+		// 	std::cout << path << std::endl;
+		// }
 
-	n_score[0] += n_scr;
-	n_score[1] += (n_scr - 1 > 0) ? n_scr - 1 : 0;
-	n_score[2] += (n_scr - 2 > 0) ? n_scr - 2 : 0;
+		a_score[0] += a_scr;
+		a_score[1] += (a_scr - 1 > 0) ? a_scr - 1 : 0;
+		a_score[2] += (a_scr - 2 > 0) ? a_scr - 2 : 0;
+
+		a_scr = 0;
+
+		n_score[0] += n_scr;
+		n_score[1] += (n_scr - 1 > 0) ? n_scr - 1 : 0;
+		n_score[2] += (n_scr - 2 > 0) ? n_scr - 2 : 0;
+
+		n_scr = 0;
+	}
 
 	return (a_score[0] + a_score[1] + a_score[2]) - (n_score[0] + n_score[1] + n_score[2]);
 }

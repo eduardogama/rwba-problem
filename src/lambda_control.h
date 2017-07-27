@@ -31,8 +31,6 @@ public:
 
 
 	void getActualSateNetwork();
-	unsigned actualPossibilities(Path &path, unsigned lambda, unsigned nSlots);
-	unsigned nextPossibilities(Path &path, unsigned lambda, unsigned nSlots);
 	vector<Hole> Possibilities(Path &path, unsigned nSlots);
 	bool canAllocNextState(const Path &path, unsigned lambda, unsigned slot);
 
@@ -41,8 +39,8 @@ public:
 	unsigned calcPossibilities(Path &path, unsigned lambda, unsigned nSlots);
 
 	void initNextStateNetwork();
-	void allocNextStateNetwork(Path &path, unsigned lambda, unsigned slot, unsigned nSlots);
-	void disallocNextStateNetwork(Path &path, unsigned lambda, unsigned slot, unsigned nSlots);
+	void allocNextStateNetwork(const Path &path, unsigned lambda, unsigned slot, unsigned nSlots);
+	void disallocNextStateNetwork(const Path &path, unsigned lambda, unsigned slot, unsigned nSlots);
 
 	double getAvailability();
 
@@ -54,7 +52,6 @@ private:
 	unsigned tSlots;
 
 	double availability;
-	vector<bool> actualStateNetwork;
 	vector<bool> nextStateNetwork;
 };
 

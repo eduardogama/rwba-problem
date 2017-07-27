@@ -195,21 +195,19 @@ bool WavelengthAssignmentSubProblem::lossOfCapacityHeuristc(Path &path, vector<P
 	if(possibilities.empty())
 		return false;
 
-	double best_capacity = DBL_MAX;
+	int best_capacity = INT_MAX;
 
 	lambdaControl->initNextStateNetwork();
 	for (unsigned int i = 0; i < possibilities.size(); i += 1)
 	{
-		double capacity = 0;
+		int capacity = 0;
 
 		lambdaControl->allocNextStateNetwork(path, possibilities[i].getLambda(), possibilities[i].getSlot(), nSlots);
 
 		for (unsigned int p_i = 0; p_i < path_int.size(); p_i += 1)
 		{
 			Path p_int = path_int[p_i];
-			//capacity += ( (double) lambdaControl->calcPossibilities(p_int, possibilities[i].getLambda(), 3) / calcPossibilitiesLambdas(p_int) );
-			capacity += lambdaControl->calcRelativesPossibilities(p_int, possibilities[i].getLambda());
-			// capacity += lambdaControl->calcPossibilities(p_int, possibilities[i].getLambda());
+			capacity += lambdaControl->calcPossibilities(p_int, possibilities[i].getLambda());
 		}
 
 		if(capacity < best_capacity)
