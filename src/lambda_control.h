@@ -31,7 +31,7 @@ public:
 
 	bool canAllocNextState(const Path &path, unsigned lambda, unsigned slot);
 
-	double calcRelativesPossibilities(Path &path, unsigned lambda);
+	void calcRelativesPossibilities(Path &path, unsigned lambda, double &capacity);
 	unsigned calcPossibilities(Path &path, unsigned lambda);
 
 	void initNextStateNetwork();

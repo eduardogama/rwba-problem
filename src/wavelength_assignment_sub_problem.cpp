@@ -206,7 +206,7 @@ bool WavelengthAssignmentSubProblem::lossOfCapacityHeuristc(Path &path, vector<P
 		for (unsigned int p_i = 0; p_i < path_int.size(); p_i += 1)
 		{
 			Path p_int = path_int[p_i];
-			capacity += lambdaControl->calcRelativesPossibilities(p_int, possibilities[i].getLambda());
+			lambdaControl->calcRelativesPossibilities(p_int, possibilities[i].getLambda(), capacity);
 		}
 
 		if(capacity < best_capacity)

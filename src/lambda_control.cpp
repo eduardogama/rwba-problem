@@ -178,7 +178,7 @@ void LambdaControl::disallocNextStateNetwork(const Path &path, unsigned lambda, 
 	}
 }
 
-double LambdaControl::calcRelativesPossibilities(Path &path, unsigned lambda)
+void LambdaControl::calcRelativesPossibilities(Path &path, unsigned lambda, double &capacity)
 {
 	int a_score[] = {0,0,0};
 	int a_scr = 0;
@@ -237,8 +237,7 @@ double LambdaControl::calcRelativesPossibilities(Path &path, unsigned lambda)
 	n_score[1] += ((n_scr - 1 > 0) ? n_scr - 1 : 0);
 	n_score[2] += ((n_scr - 2 > 0) ? n_scr - 2 : 0);
 
-	//double result =  ;
-	return ((a_score[0] + a_score[1] + a_score[2]) - (n_score[0] + n_score[1] + n_score[2]))/(r_score[0] + r_score[1] + r_score[2]);
+	capacity += ((a_score[0] + a_score[1] + a_score[2]) - (n_score[0] + n_score[1] + n_score[2]))/(r_score[0] + r_score[1] + r_score[2]);
 }
 
 unsigned LambdaControl::calcPossibilities(Path &path, unsigned lambda)
