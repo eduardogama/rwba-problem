@@ -237,7 +237,7 @@ void LambdaControl::calcRelativesPossibilities(Path &path, unsigned lambda, doub
 	n_score[1] += ((n_scr - 1 > 0) ? n_scr - 1 : 0);
 	n_score[2] += ((n_scr - 2 > 0) ? n_scr - 2 : 0);
 
-	capacity += ((a_score[0] + a_score[1] + a_score[2]) - (n_score[0] + n_score[1] + n_score[2]))/(r_score[0] + r_score[1] + r_score[2]);
+	capacity += ((a_score[0] + a_score[1] + a_score[2]) - (n_score[0] + n_score[1] + n_score[2]));
 }
 
 unsigned LambdaControl::calcPossibilities(Path &path, unsigned lambda)
