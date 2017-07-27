@@ -122,7 +122,7 @@ void LambdaControl::clear()
 {
     for (int i = 0 ; i < matrixAllocation.size() ; i++)
     {
-        matrixAllocation[i] = 0;
+        matrixAllocation[i] = NULL;
     }
     // for (int i = 0 ; i < lambdaUsed.size() ; i++)
     // {
@@ -180,11 +180,11 @@ void LambdaControl::disallocNextStateNetwork(const Path &path, unsigned lambda, 
 
 double LambdaControl::calcRelativesPossibilities(Path &path, unsigned lambda)
 {
-	double a_score[] = {0,0,0};
-	double a_scr = 0;
+	int a_score[] = {0,0,0};
+	int a_scr = 0;
 
-	double n_score[] = {0,0,0};
-	double n_scr = 0;
+	int n_score[] = {0,0,0};
+	int n_scr = 0;
 
 	double r_score[] = {0,0,0};
 
@@ -237,8 +237,8 @@ double LambdaControl::calcRelativesPossibilities(Path &path, unsigned lambda)
 	n_score[1] += ((n_scr - 1 > 0) ? n_scr - 1 : 0);
 	n_score[2] += ((n_scr - 2 > 0) ? n_scr - 2 : 0);
 
-	double result =  ((a_score[0] + a_score[1] + a_score[2]) - (n_score[0] + n_score[1] + n_score[2]))/(r_score[0] + r_score[1] + r_score[2]);
-	return result;
+	//double result =  ;
+	return ((a_score[0] + a_score[1] + a_score[2]) - (n_score[0] + n_score[1] + n_score[2]))/(r_score[0] + r_score[1] + r_score[2]);
 }
 
 unsigned LambdaControl::calcPossibilities(Path &path, unsigned lambda)
