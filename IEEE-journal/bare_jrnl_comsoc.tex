@@ -64,8 +64,12 @@ In the figure \ref{morpheus_arch_node} we can see the structural architecture of
 
 \subsection{Proposed Algorithm}
 
-In this study we proposed a new strategy approach for band and wavelength assignment stages in the RWBA algorithm. Furthermore we compared the new approach with the strategies presented in \cite{imoc_2015}.\textcolor{red}{ highlighted Extremes, a band assignment strategy that explores the extremes of spectrum to avoid its fragmentation. The new proposed strategy, that we called \textit{Least Capacity Loss} (LCL), is an efficient algorithm that we adapted from \cite{raul_lcl}. This algorithm was proposed firstly for the RSA problem. This strategy quantify the spare of bands for future requests. In this study we adapted the LCL algorithm to the RWAB context and proposed it as a new strategy for band and wavelength assignment as an undivided stage of RWBA algorithm.}
+Este estudo é proposto duas formas diferentes de implementar a heuristica LCL para o problema RWBA levando em consideração as diferentes formas de configuração.
 
+\textcolor{red}{In this study we proposed a new strategy approach for band and wavelength assignment stages in the RWBA algorithm. Furthermore we compared the new approach with the strategies presented in \cite{imoc_2015}.
+highlighted Extremes, a band assignment strategy that explores the extremes of spectrum to avoid its fragmentation. The new proposed strategy, that we called \textit{Least Capacity Loss} (LCL), is an efficient algorithm that we adapted from \cite{raul_lcl}. This algorithm was proposed firstly for the RSA problem. This strategy quantify the spare of bands for future requests. In this study we adapted the LCL algorithm to the RWAB context and proposed it as a new strategy for band and wavelength assignment as an undivided stage of RWBA algorithm.}
+
+Let us define the capacity of a network as proportional to the number of ways of assigning a n-request. Once given a chosen route, the LCL algorithm have to choose an wavelength and a subset of bands that minimize the loss of number of ways of assignment for future requests. Assuming that each fiber of MORPHEUS network is composed by W wavelengths (indexed as 1, 2, ..., W ) and each wavelength $w \in W$ has B bands (indexed as 1, 2, ..., B).
 
 \subsubsection{Subsubsection Heading Here}
 
