@@ -206,6 +206,9 @@ void LambdaControl::calcRelativesPossibilities(Path &path, unsigned lambda, doub
 
 		a_scr = 0;
 	}
+	if((r_score[0] + r_score[1] + r_score[2]) == 0){
+		return;
+	}
 
 	for(unsigned slot = 0 ; slot < tSlots; slot++){
 		if(canAlloc(path, lambda, slot)){

@@ -12,25 +12,26 @@
 using namespace std;
 
     //int tNos = 6;
-    int tNos = 5;
+    // int tNos = 5;
+    int tNos = 9;
     char nome[] = "Rede Anel MORPHEUS.";
 
     unsigned dist[]=
 
-//        {
-//          //A  B  C  D  E  F  G  H  I
-//            0, 1, 0, 0, 0, 0, 0, 0, 1,
-//            1, 0, 1, 0, 0, 0, 0, 0, 0,
-//            0, 1, 0, 1, 0, 0, 0, 0, 0,
-//            0, 0, 1, 0, 1, 0, 0, 0, 0,
-//            0, 0, 0, 1, 0, 1, 0, 0, 0,
-//            0, 0, 0, 0, 1, 0, 1, 0, 0,
-//            0, 0, 0, 0, 0, 1, 0, 1, 0,
-//            0, 0, 0, 0, 0, 0, 1, 0, 1,
-//            1, 0, 0, 0, 0, 0, 0, 1, 0
-//        };
-
         {
+          //A  B  C  D  E  F  G  H  I
+            0, 1, 0, 0, 0, 0, 0, 0, 1,
+            1, 0, 1, 0, 0, 0, 0, 0, 0,
+            0, 1, 0, 1, 0, 0, 0, 0, 0,
+            0, 0, 1, 0, 1, 0, 0, 0, 0,
+            0, 0, 0, 1, 0, 1, 0, 0, 0,
+            0, 0, 0, 0, 1, 0, 1, 0, 0,
+            0, 0, 0, 0, 0, 1, 0, 1, 0,
+            0, 0, 0, 0, 0, 0, 1, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 1, 0
+        };
+
+/*        {
             //A  B  C  D  E
               0, 1, 0, 0, 1,
               1, 0, 1, 0, 0,
@@ -38,7 +39,7 @@ using namespace std;
               0, 0, 1, 0, 1,
               1, 0, 0, 1, 0,
         };
-
+*/
 //O programa começa aqui
 //Apenas faço algumas inicializações e chamo sim.rum() para rodar a simuação propriamente dita
 int main(int argc, char *argv[])
